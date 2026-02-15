@@ -79,6 +79,46 @@
           <li>Schedule daily run: <code>node src/cli.js schedule --workflow workflows/sample-workflow.yaml --time 09:00</code></li>
         </ul>
       </section>
+      <section class="card help">
+        <h2>Advanced / troubleshooting</h2>
+        <p><strong>OpenClaw adapter:</strong> Set <code>openclaw.command</code> in the workflow or <code>CLAWTOMATIONS_OPENCLAW_COMMAND</code> to force a custom invocation.</p>
+        <ul>
+          <li>OpenClaw v1 style sample:
+            <code>openclaw run --workflow {{workflow.path}} --output {{workflow.output}}</code>
+          </li>
+          <li>OpenClaw v2 style sample:
+            <code>openclaw agent run --workflow {{workflow.path}} --output {{workflow.output}}</code>
+          </li>
+          <li>Build + send with local command:
+            <code>node src/cli.js openclaw --workflow workflows/sample-workflow.yaml</code>
+          </li>
+        </ul>
+        <p><strong>Troubleshooting:</strong></p>
+        <ul>
+          <li>Run fails at login: re-run capture and update <code>auth/*.json</code>.</li>
+          <li>Session errors: delete old auth state and recapture for that site.</li>
+          <li>Browser startup fail: confirm <code>npm install</code> and Playwright install completed.</li>
+          <li>Missing site path: verify each workflow uses a valid <code>authState</code> path.</li>
+        </ul>
+        <p><strong>Example workflow snippet:</strong></p>
+        <pre><code>settings:
+  headless: true
+  outputDir: "outputs"
+
+sites:
+  - name: example
+    authState: "auth/example-session.json"
+    requiresLogin: true
+    steps:
+      - action: navigate
+        url: "https://example.com"
+      - action: copy
+        selector: "h1"
+        key: "heading"
+      - action: screenshot
+        file: "home.png"
+        key: "homepage"</code></pre>
+      </section>
     </main>
     <script>
       const runBtn = document.getElementById("runBtn");
