@@ -1,0 +1,26 @@
+name: example-clawtomations-workflow
+settings:
+  headless: true
+  timeoutMs: 30000
+  outputDir: "outputs"
+
+# Optional integration section. Uncomment + edit for your OpenClaw version.
+# openclaw:
+#   command: "openclaw agent run --workflow {{workflow.path}} --output {{workflow.output}}"
+
+vars:
+  report_date: "{{now.date}}"
+
+sites:
+  - name: example-site
+    authState: "auth/example-session.json"
+    requiresLogin: false
+    steps:
+      - action: navigate
+        url: "https://example.com"
+      - action: screenshot
+        file: "homepage.png"
+        key: "homepage_screenshot"
+      - action: copy
+        selector: "h1"
+        key: "main_heading"

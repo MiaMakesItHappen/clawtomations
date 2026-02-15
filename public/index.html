@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clawtomations</title>
+    <style>
+      body {
+        font-family: "Trebuchet MS", -apple-system, sans-serif;
+        margin: 0;
+        padding: 24px;
+        background: linear-gradient(135deg, #0b1220, #1f2d52);
+        color: #f2f5ff;
+      }
+      main {
+        max-width: 680px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        backdrop-filter: blur(8px);
+      }
+      label {
+        display: block;
+        margin: 10px 0 4px;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+      }
+      button {
+        margin-top: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        background: #ffd166;
+        color: #112;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Clawtomations</h1>
+      <section class="card">
+        <label for="workflow">Workflow file</label>
+        <input id="workflow" value="workflows/sample-workflow.yaml" />
+        <button id="runBtn">Run now</button>
+      </section>
+      <section class="card">
+        <strong>Last run</strong>
+        <pre id="status">idle</pre>
+      </section>
+    </main>
+    <script>
+      const runBtn = document.getElementById("runBtn");
+      const workflow = document.getElementById("workflow");
+      const status = document.getElementById("status");
+
+      runBtn.addEventListener("click", async () => {
+        status.textContent = "running...";
+        try {
+          const response = await fetch("/run", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ workflow: workflow.value })
+          });
+          const data = await response.json();
+          status.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          status.textContent = `Error: ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>

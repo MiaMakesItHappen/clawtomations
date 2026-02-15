@@ -1,0 +1,10 @@
+node_modules
+outputs/
+playwright-report
+playwright/.cache
+.DS_Store
+.env
+!config/
+
+auth/
+.playwright/
